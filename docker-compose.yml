@@ -8,10 +8,12 @@ services:
     ports:
       # Macのポート80番を、Nginxコンテナのポート80番に繋ぐ
       - "80:80"
+      - "443:443"
     volumes:
       # Macの./nginxフォルダを、コンテナの/etc/nginx/conf.dに繋ぐ
       # これで、Nginxの設定ファイルをコンテナに渡せる
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d:z
+      - /etc/letsencrypt:/etc/letsencrypt:z
     depends_on:
       - nextjs
       - strapi
