@@ -17,3 +17,4 @@ node_modules/
 
 # その他
 .tmp/
+.DS_Store
