@@ -1,0 +1,19 @@
+# .gitignore
+
+# 依存関係
+node_modules/
+/nextjs/node_modules/
+/backend/node_modules/
+
+# ビルド成果物
+/nextjs/.next/
+/backend/build/
+/backend/.cache/
+
+# 環境変数ファイル
+.env
+.env.*
+!/.env.example
+
+# その他
+.tmp/

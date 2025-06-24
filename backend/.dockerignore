@@ -1,0 +1,14 @@
+# .dockerignore
+
+# Macからnode_modulesをコピーしない
+node_modules
+
+# ビルド成果物やキャッシュもコピーしない
+build
+.cache
+
+# ローカルの環境変数ファイル
+.env
+
+# SQLiteのデータベースファイル
+.tmp

@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # --- 1. Webサーバー / リバースプロキシ (Nginx) ---
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: myapp_nginx
+    ports:
+      # Macのポート80番を、Nginxコンテナのポート80番に繋ぐ
+      - "80:80"
+    volumes:
+      # Macの./nginxフォルダを、コンテナの/etc/nginx/conf.dに繋ぐ
+      # これで、Nginxの設定ファイルをコンテナに渡せる
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - nextjs
+      - strapi
+    networks:
+      - myapp_network
+
+  # --- 2. フロントエンド (Next.js) ---
+  nextjs:
+    container_name: myapp_nextjs
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - myapp_network
+    depends_on:
+      - strapi # Strapiが起動してから、Next.jsが起動するようにする
+
+  # --- 3. バックエンド / CMS (Strapi) ---
+  strapi:
+    container_name: myapp_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      # ユーザーがアップロードした画像などが消えないように、データをPC側に保存する設定
+      - strapi_data:/app/public/uploads
+    # Strapiは外部に公開しないので、portsの設定は削除
+    networks:
+      - myapp_network
+
+# --- データの永続化設定 ---
+volumes:
+  strapi_data:
+
+# --- コンテナ間のプライベートネットワーク設定 ---
+networks:
+  myapp_network:
+    driver: bridge
