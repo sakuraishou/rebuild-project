@@ -18,3 +18,7 @@ node_modules/
 # その他
 .tmp/
 .DS_Store
+
+# ローカル開発用の上書きファイル
+docker-compose.override.yml
+nginx/local.conf
